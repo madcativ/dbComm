@@ -48,7 +48,7 @@ export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPo
 
             let dbConn = await this.dbConnService.Open()
 
-            let mssqlRequest = this.FillQueryRequest(request.data, dbConn.GetConn().request())
+            let mssqlRequest = this.FillQueryRequest(request.data, dbConn.connObj.request())
 
             let queryResult = await mssqlRequest.query<U>(request.query)
 
@@ -78,7 +78,7 @@ export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPo
 
             let dbConn = await this.dbConnService.Open()
 
-            let mssqlRequest = this.FillSPRequest(request.params, dbConn.GetConn().request())
+            let mssqlRequest = this.FillSPRequest(request.params, dbConn.connObj.request())
 
             let queryResult = await mssqlRequest.execute(request.spName)
 
@@ -101,45 +101,4 @@ export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPo
             throw new DBCallsCouldNotCallEx()
         }
     }
-
-    // async CallSP<T>(requestSPEntity : RequestSPEntity) : Promise<ResultEntity<T> | null>{
-    //     try{
-    //         let dbConnEntity = await this.dbConnService.Open()
-
-    //         if(dbConnEntity == null){ throw "No connection established" }
-
-    //         let request = (dbConnEntity.conn as sql.ConnectionPool).request()
-
-    //         for(let i = 0; i < requestSPEntity.params.length; i++){
-    //             if(requestSPEntity.params[0].dir == SPParamsDirections.INPUT){
-    //                 request = request.input(
-    //                     requestSPEntity.params[0].name,
-    //                     TediousMSSQLTypes[requestSPEntity.params[0].type],
-    //                     requestSPEntity.params[0].value
-    //                 )
-    //             }else{
-    //                 request = request.output(
-    //                     requestSPEntity.params[0].name,
-    //                     TediousMSSQLTypes[requestSPEntity.params[0].type],
-    //                     requestSPEntity.params[0].value
-    //                 )
-    //             }
-    //         }
-
-    //         let result = await request.execute(requestSPEntity.name)
-
-    //         if(result.recordset.length <= 0){ throw "The execution didn't return results" }
-
-    //         let resultEntity = new ResultEntity<T>(result.recordset)
-
-    //         this.dbConnService.Close()
-
-    //         return resultEntity
-    //     }catch(error){
-    //         this.dbConnService.Close()
-            
-    //         if(error.name == "RequestError"){ console.error("There was a Request Error") }
-    //         return null
-    //     }
-    // }
 }

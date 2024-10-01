@@ -6,7 +6,7 @@ import 'dotenv/config'
 describe("DB Connection", () => {
     test("Connect with bad config", async () => {
         try{
-            let dbConnConfig = new DBConnConfigMSSQL({server : ""})
+            let dbConnConfig = new DBConnConfigMSSQL()
             let dbConnService = new DBConnMSSQLService(dbConnConfig)
             dbConnService.Open()
         }catch(error){
@@ -15,7 +15,13 @@ describe("DB Connection", () => {
     })
 
     test("Connect with good config", async () => {
-        let dbConnConfig = new DBConnConfigMSSQL()
+        let dbConnConfig = new DBConnConfigMSSQL(
+            process.env.MSSQL_USER,
+            process.env.MSSQL_PASS,
+            process.env.MSSQL_DB,
+            process.env.MSSQL_HOST,
+            parseInt(process.env.MSSQL_PORT)
+        )
         let dbConnService = new DBConnMSSQLService(dbConnConfig)
         let dbConn = await dbConnService.Open()
 
@@ -26,7 +32,13 @@ describe("DB Connection", () => {
     })
 
     test("Disconnect properly", async () => {
-        let dbConnConfig = new DBConnConfigMSSQL()
+        let dbConnConfig = new DBConnConfigMSSQL(
+            process.env.MSSQL_USER,
+            process.env.MSSQL_PASS,
+            process.env.MSSQL_DB,
+            process.env.MSSQL_HOST,
+            parseInt(process.env.MSSQL_PORT)
+        )
         let dbConnService = new DBConnMSSQLService(dbConnConfig)
         let dbConn = await dbConnService.Open()
 
@@ -38,7 +50,13 @@ describe("DB Connection", () => {
 
     test("Disconnect without open", async() => {
         try{
-            let dbConnConfig = new DBConnConfigMSSQL()
+            let dbConnConfig = new DBConnConfigMSSQL(
+                process.env.MSSQL_USER,
+                process.env.MSSQL_PASS,
+                process.env.MSSQL_DB,
+                process.env.MSSQL_HOST,
+                parseInt(process.env.MSSQL_PORT)
+            )
             let dbConnService = new DBConnMSSQLService(dbConnConfig)
 
             dbConnService.Close()

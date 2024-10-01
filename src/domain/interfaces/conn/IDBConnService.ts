@@ -1,6 +1,7 @@
 import IDBConn from "./IDBConn"
 
-export default interface IDBConnService<T>{
-    Open() : Promise<IDBConn<T>>
+export default interface IDBConnService{
+    conn : IDBConn
+    Open() : Promise<IDBConn>
     Close() : void
 }

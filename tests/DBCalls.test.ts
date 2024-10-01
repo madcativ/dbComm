@@ -29,8 +29,7 @@ describe("DB Calls", () => {
             FROM TEMP
             `
         ))
-
-        expect 
+        
         expect(callsResult.result).toEqual([
             { "field1" : "Hola", "field2" : "Mundo", "field3" : "!!!" },
             { "field1" : "Hello", "field2" : "World", "field3" : "!!!" }

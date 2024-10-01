@@ -1,33 +1,37 @@
 import { DBConnCouldNotConnectEx, DBConnCouldNotDisconnectEx } from "@dbComm/src/domain/exceptions/DBConnExceptions"
 import IDBConn from "@dbComm/src/domain/interfaces/conn/IDBConn"
-import IDBConnConfig from "@dbComm/src/domain/interfaces/conn/IDBConnConfig"
 import sql from "mssql"
 import DBConnService from "../DBConnService"
+import DBConnConfigMSSQL from "./DBConnConfigMSSQL"
 import DBConnMSSQL from "./DBConnMSSQL"
 
-export default class DBConnMSSQLService extends DBConnService<sql.ConnectionPool>{
-    constructor(config : IDBConnConfig<sql.config>){
-        super(config)
-    }
-
-    async Open() : Promise<IDBConn<sql.ConnectionPool>>{
-        let sqlConn = await sql.connect(this.config.GetConfig())
+export default class DBConnMSSQLService extends DBConnService<DBConnMSSQL, DBConnConfigMSSQL>{
+    async Open() : Promise<IDBConn>{
+        let sqlConn = await sql.connect({
+            user : this.config.user,
+            password : this.config.pass,
+            database : this.config.db,
+            server : this.config.host,
+            port : this.config.port,
+            pool : this.config.pool,
+            options : this.config.options
+        })
 
         if(!sqlConn.connected){ throw new DBConnCouldNotConnectEx() }
 
-        this.dbConn = new DBConnMSSQL(sqlConn)
+        this.conn = new DBConnMSSQL(sqlConn, this.config)
 
-        return this.dbConn
+        return this.conn
     }
 
-    Close() : void{
-        if(!this.dbConn || !this.dbConn.IsConnnected()){
+    Close(){
+        if(!this.conn || !this.conn.IsConnnected()){
             throw new DBConnCouldNotDisconnectEx("Connection is not open")
         }
 
         let error = ""
 
-        this.dbConn.GetConn().close(err => error = err)
+        this.conn.connObj.close(err => error = err)
 
         if(error != ""){ throw new DBConnCouldNotDisconnectEx() }
     }

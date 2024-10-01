@@ -6,7 +6,8 @@ export default class DBCallsServiceFactory{
     Get(serviceName : string = "mssql", config? : any) : IDBCallsService{
         switch(serviceName){
             case "mssql" :
-                return new DBCallsMSSQLService(new DBConnServiceFactory().Get("mssql", config))
+                const dbConnService = new DBConnServiceFactory().Get("mssql", config)
+                return new DBCallsMSSQLService(dbConnService)
             default :
                 return null
         }

@@ -5,9 +5,9 @@ import IDBCallsService from "@dbComm/src/domain/interfaces/calls/IDBCallsService
 import IDBConnService from "@dbComm/src/domain/interfaces/conn/IDBConnService"
 
 export default class DBCallsService<T> implements IDBCallsService{
-    dbConnService : IDBConnService<T>
+    dbConnService : IDBConnService
 
-    constructor(dbConnService : IDBConnService<T>){
+    constructor(dbConnService : IDBConnService){
         this.dbConnService = dbConnService
     }
 

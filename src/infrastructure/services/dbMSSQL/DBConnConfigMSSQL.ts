@@ -1,5 +1,4 @@
-import sql from "mssql"
-import DBConnConfig from "../DBConnConfig"
+import IDBConnConfig from "@dbComm/src/domain/interfaces/conn/IDBConnConfig"
 
 export const defaultPool = {
     max : 10,
@@ -12,33 +11,50 @@ export const defaultOptions = {
     trustServerCertificate : true
 }
 
-export default class DBConnConfigMSSQL extends DBConnConfig<sql.config>{
-    constructor(config? : sql.config){
-        super(
-            {
-                user : process.env.MSSQL_USER,
-                password : process.env.MSSQL_PASS,
-                database : process.env.MSSQL_DB,
-                server : process.env.MSSQL_HOST,
-                port : parseInt(process.env.MSSQL_PORT),
-                pool : defaultPool,
-                options : defaultOptions
-            },
-            config
-        )
+export default class DBConnConfigMSSQL implements IDBConnConfig{
+    user : string
+    pass : string
+    db : string
+    host : string
+    port : number
+    pool : typeof defaultPool
+    options : typeof defaultOptions
+
+    constructor(
+        user : string = process.env.MSSQL_USER,
+        pass : string = process.env.MSSQL_PASS,
+        db : string = process.env.MSSQL_DB,
+        host : string = process.env.MSSQL_HOST,
+        port : number = parseInt(process.env.MSSQL_PORT),
+        pool : typeof defaultPool = defaultPool,
+        options : typeof defaultOptions = defaultOptions
+    ){
+        this.user = user
+        this.pass = pass
+        this.db = db
+        this.host = host
+        this.port = port
+        this.pool = pool
+        this.options = options
     }
 
     IsValid() : boolean {
-        if(
-            this.config.user != "" &&
-            this.config.password != "" &&
-            this.config.database != "" &&
-            this.config.server != "" &&
-            this.config.port > 0
-        ){
-            return true
-        }
+        return (
+            this.user != "" &&
+            this.pass != "" &&
+            this.db != "" &&
+            this.host != "" &&
+            this.port > 0
+        )
+    }
 
-        return false
+    RevertDefault() : void {
+        this.user = process.env.MSSQL_USER
+        this.pass = process.env.MSSQL_PASS
+        this.db = process.env.MSSQL_DB
+        this.host = process.env.MSSQL_HOST
+        this.port = parseInt(process.env.MSSQL_PORT)
+        this.pool = defaultPool,
+        this.options = defaultOptions
     }
 }

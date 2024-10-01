@@ -1,11 +1,20 @@
 import { DBConnIsNullEx } from "@dbComm/src/domain/exceptions/DBConnExceptions"
+import IDBConn from "@dbComm/src/domain/interfaces/conn/IDBConn"
+import IDBConnConfig from "@dbComm/src/domain/interfaces/conn/IDBConnConfig"
 import sql from "mssql"
-import DBConn from "../DBConn"
 
-export default class DBConnMSSQL extends DBConn<sql.ConnectionPool>{
-    IsConnnected() : boolean {
-        if(this.conn == null){ throw new DBConnIsNullEx() }
+export default class DBConnMSSQL implements IDBConn {
+    connObj : sql.ConnectionPool
+    config : IDBConnConfig
 
-        return this.conn.connected
+    constructor(connObj : sql.ConnectionPool, config : IDBConnConfig) {
+        this.connObj = connObj
+        this.config = config
+    }
+
+    IsConnnected(): boolean {
+        if (this.connObj == null) { throw new DBConnIsNullEx() }
+
+        return this.connObj.connected
     }
 }

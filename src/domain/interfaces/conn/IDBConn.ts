@@ -1,4 +1,7 @@
-export default interface IDBConn<T>{
-    GetConn() : T
+import IDBConnConfig from "./IDBConnConfig"
+
+export default interface IDBConn{
+    connObj : any
+    config : IDBConnConfig
     IsConnnected() : boolean
 }
