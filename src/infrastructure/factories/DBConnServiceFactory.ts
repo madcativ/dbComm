@@ -8,7 +8,7 @@ export default class DBConnServiceFactory{
             case "mssql" :
                 const dbConnConfigMSSQL = config === undefined
                     ? new DBConnConfigMSSQL()
-                    : new DBConnConfigMSSQL(config.user, config.pass, config.db, config.host, config.port)
+                    : new DBConnConfigMSSQL(config.user, config.password, config.database, config.server, config.port)
                 return new DBConnMSSQLService(dbConnConfigMSSQL)
             default :
                 return null
