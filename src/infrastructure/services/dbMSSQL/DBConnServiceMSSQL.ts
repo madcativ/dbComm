@@ -6,7 +6,7 @@ import DBConnConfigMSSQL from "./DBConnConfigMSSQL"
 import DBConnMSSQL from "./DBConnMSSQL"
 
 export default class DBConnMSSQLService extends DBConnService<DBConnMSSQL, DBConnConfigMSSQL>{
-    async Open() : Promise<IDBConn>{
+    async Open() : Promise<IDBConn | null>{
         let sqlConn = await sql.connect({
             user : this.config.user,
             password : this.config.pass,

@@ -1,4 +1,5 @@
 import IDBConnConfig from "@dbComm/src/domain/interfaces/conn/IDBConnConfig"
+import { DEFAULT_DB_DATABASE, DEFAULT_DB_HOST, DEFAULT_DB_PASS, DEFAULT_DB_PORT, DEFAULT_DB_USER } from "../../contants/DefaultsDBConnConfig"
 
 export const defaultPool = {
     max : 10,
@@ -21,11 +22,11 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
     options : typeof defaultOptions
 
     constructor(
-        user : string = process.env.MSSQL_USER,
-        pass : string = process.env.MSSQL_PASS,
-        db : string = process.env.MSSQL_DB,
-        host : string = process.env.MSSQL_HOST,
-        port : number = parseInt(process.env.MSSQL_PORT),
+        user : string = DEFAULT_DB_USER,
+        pass : string = DEFAULT_DB_PASS,
+        db : string = DEFAULT_DB_DATABASE,
+        host : string = DEFAULT_DB_HOST,
+        port : number = DEFAULT_DB_PORT,
         pool : typeof defaultPool = defaultPool,
         options : typeof defaultOptions = defaultOptions
     ){
@@ -49,11 +50,11 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
     }
 
     RevertDefault() : void {
-        this.user = process.env.MSSQL_USER
-        this.pass = process.env.MSSQL_PASS
-        this.db = process.env.MSSQL_DB
-        this.host = process.env.MSSQL_HOST
-        this.port = parseInt(process.env.MSSQL_PORT)
+        this.user = DEFAULT_DB_USER
+        this.pass = DEFAULT_DB_PASS
+        this.db = DEFAULT_DB_DATABASE
+        this.host = DEFAULT_DB_HOST
+        this.port = DEFAULT_DB_PORT
         this.pool = defaultPool,
         this.options = defaultOptions
     }

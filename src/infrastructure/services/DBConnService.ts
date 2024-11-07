@@ -13,7 +13,7 @@ export default class DBConnService<T extends IDBConn, U extends IDBConnConfig> i
         this.config = config
     }
 
-    async Open() : Promise<T>{ return null }
+    async Open() : Promise<T | null>{ return null }
 
     Close() : void{  }
 }

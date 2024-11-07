@@ -7,6 +7,7 @@ import DBCallsServiceFactory from '@dbComm/src/infrastructure/factories/DBCallsS
 import DBCallsRequestQuery from '@dbComm/src/infrastructure/services/DBCallsRequestQuery'
 import DBCallsRequestSP from '@dbComm/src/infrastructure/services/DBCallsRequestSP'
 import 'dotenv/config'
+import { describe, expect, test } from "vitest"
 
 describe("DB Calls", () => {
     test("Select simple", async () => {
