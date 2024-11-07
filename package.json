@@ -1,0 +1,11 @@
+{
+  "name": "dbcomm",
+  "version": "1.0.0",
+  "description": "Simple abstraction for db connection and queries and sp calls",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "author": "madcativ",
+  "license": "GPL-3.0-only"
+}
