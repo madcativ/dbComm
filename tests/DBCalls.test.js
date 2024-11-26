@@ -1,23 +1,19 @@
-import 'dotenv/config'
-import { describe, expect, test } from "vitest"
-import { DBCallsBadRequestEx } from '../src/domain/exceptions/DBCallsExceptions'
-import ParamsDirections from '../src/domain/valueObjs/ParamsDirections'
-import ParamsTypes from '../src/domain/valueObjs/ParamsTypes'
-import QueryParam from '../src/domain/valueObjs/QueryParam'
-import SPParam from '../src/domain/valueObjs/SPParam'
-import DBCallsServiceFactory from '../src/infrastructure/factories/DBCallsServiceFactory'
-import DBCallsRequestQuery from '../src/infrastructure/services/DBCallsRequestQuery'
-import DBCallsRequestSP from '../src/infrastructure/services/DBCallsRequestSP'
+import { describe, test, expect } from "vitest"
+const { DBCallsServiceFactory } = require("../src/infrastructure/factories/DBCallsServiceFactory")
+const { DBCallsRequestQuery } = require("../src/infrastructure/services/DBCallsRequestQuery")
+const { QueryParam } = require("../src/domain/valueObjs/QueryParam")
+const { ParamsTypes } = require("../src/domain/valueObjs/ParamsTypes")
+const { ParamsDirections } = require("../src/domain/valueObjs/ParamsDirections")
+const { DBCallsBadRequestEx } = require("../src/domain/exceptions/DBCallsExceptions")
+const { DBCallsRequestSP } = require("../src/infrastructure/services/DBCallsRequestSP")
+const { SPParam } = require("../src/domain/valueObjs/SPParam")
 
 describe("DB Calls", () => {
     test("Select simple", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
 
-        let callsResult = await dbCallsService.CallQuery<{
-            field1 : string,
-            field2 : string,
-            field3 : string
-        }>(new DBCallsRequestQuery(
+        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
+        let callsResult = await dbCallsService.CallQuery(new DBCallsRequestQuery(
             `
             WITH TEMP(field1, field2, field3)
             AS
@@ -40,11 +36,8 @@ describe("DB Calls", () => {
     test("Select with good params", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
 
-        let callsResult = await dbCallsService.CallQuery<{
-            field1 : string,
-            field2 : string,
-            field3 : string
-        }>(new DBCallsRequestQuery(
+        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
+        let callsResult = await dbCallsService.CallQuery(new DBCallsRequestQuery(
             `
             WITH TEMP(field1, field2, field3)
             AS
@@ -72,11 +65,7 @@ describe("DB Calls", () => {
         try{
             let dbCallsService = new DBCallsServiceFactory().Get()
 
-            await dbCallsService.CallQuery<{
-                field1 : string,
-                field2 : string,
-                field3 : string
-            }>(new DBCallsRequestQuery(
+            await dbCallsService.CallQuery(new DBCallsRequestQuery(
                 `
                 WITH TEMP(field1, field2, field3)
                 AS
@@ -97,12 +86,9 @@ describe("DB Calls", () => {
 
     test("Execute SP with good params", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
-
-        let resultEntity = await dbCallsService.CallSP<{
-            field1 : string,
-            field2 : string,
-            field3 : string
-        }>(new DBCallsRequestSP("SPTest", [
+        
+        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
+        let resultEntity = await dbCallsService.CallSP(new DBCallsRequestSP("SPTest", [
             new SPParam("param1", ParamsTypes.VARCHAR, "Hello")
         ]))
 
@@ -115,11 +101,8 @@ describe("DB Calls", () => {
         try{
             let dbCallsService = new DBCallsServiceFactory().Get()
 
-            await dbCallsService.CallSP<{
-                field1 : string,
-                field2 : string,
-                field3 : string
-            }>(new DBCallsRequestSP("SPTest", [
+            /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
+            await dbCallsService.CallSP(new DBCallsRequestSP("SPTest", [
                 new SPParam("p1", ParamsTypes.VARCHAR)
             ]))
         }catch(error){

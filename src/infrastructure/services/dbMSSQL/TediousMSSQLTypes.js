@@ -1,5 +1,5 @@
-import ParamsTypes from "@dbComm/src/domain/valueObjs/ParamsTypes"
-import sql from "mssql"
+const sql = require("mssql")
+const { ParamsTypes } = require("../../../domain/valueObjs/ParamsTypes")
 
 const TediousMSSQLTypes = {
     [ParamsTypes.VARCHAR] : sql.VarChar,
@@ -17,4 +17,6 @@ const TediousMSSQLTypes = {
     [ParamsTypes.BIT] : sql.Bit,
 }
 
-export default TediousMSSQLTypes
+module.exports = {
+    TediousMSSQLTypes
+}

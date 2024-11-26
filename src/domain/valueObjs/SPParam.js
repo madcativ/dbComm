@@ -14,16 +14,16 @@ class SPParam{
     /** @type {any} */
     value
     
-    /** @type {number} */
+    /** @type {?number} */
     varying
     
-    /** @type {boolean} */
+    /** @type {?boolean} */
     nullable
     
-    /** @type {string} */
+    /** @type {?string} */
     defaultValue
 
-    /** @type {ParamsDirections} */
+    /** @type {?ParamsDirections=} */
     dir
 
     
@@ -32,10 +32,10 @@ class SPParam{
     * @param {string} name
     * @param {ParamsTypes} type
     * @param {any} value
-    * @param {number} varying
-    * @param {boolean} nullable
-    * @param {string} defaultValue
-    * @param {ParamsDirections} dir
+    * @param {?number} [varying]
+    * @param {?boolean} [nullable]
+    * @param {?string} [defaultValue]
+    * @param {?ParamsDirections} [dir]
     */
     constructor(
         name,
@@ -44,7 +44,7 @@ class SPParam{
         varying,
         nullable,
         defaultValue,
-        dir
+        dir = ParamsDirections.INPUT
     ){
         this.name = name
         this.type = type
@@ -54,4 +54,8 @@ class SPParam{
         this.defaultValue = defaultValue
         this.dir = dir
     }
+}
+
+module.exports = {
+    SPParam
 }

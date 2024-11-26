@@ -46,3 +46,7 @@ class QueryParam{
         this.value = value
     }
 }
+
+module.exports = {
+    QueryParam
+}
