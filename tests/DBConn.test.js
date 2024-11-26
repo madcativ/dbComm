@@ -1,15 +1,15 @@
-import { DBConnBadConfigEx, DBConnCouldNotDisconnectEx } from '@dbComm/src/domain/exceptions/DBConnExceptions'
-import { DEFAULT_DB_DATABASE, DEFAULT_DB_HOST, DEFAULT_DB_PASS, DEFAULT_DB_PORT, DEFAULT_DB_USER } from '@dbComm/src/infrastructure/contants/DefaultsDBConnConfig'
-import DBConnConfigMSSQL from '@dbComm/src/infrastructure/services/dbMSSQL/DBConnConfigMSSQL'
-import DBConnMSSQLService from '@dbComm/src/infrastructure/services/dbMSSQL/DBConnServiceMSSQL'
-import "dotenv/config"
-import { describe, expect, test } from "vitest"
+import { describe, test, expect } from "vitest"
+const { DBConnConfigMSSQL } = require("../src/infrastructure/services/dbMSSQL/DBConnConfigMSSQL")
+const { DBConnService } = require("../src/infrastructure/services/DBConnService")
+const { DBConnBadConfigEx, DBConnCouldNotDisconnectEx } = require("../src/domain/exceptions/DBConnExceptions")
+const { DEFAULT_DB_USER, DEFAULT_DB_PASS, DEFAULT_DB_DATABASE, DEFAULT_DB_HOST, DEFAULT_DB_PORT } = require("../src/infrastructure/contants/DefaultsDBConnConfig")
+const { DBConnServiceMSSQL } = require("../src/infrastructure/services/dbMSSQL/DBConnServiceMSSQL")
 
 describe("DB Connection", () => {
     test("Connect with bad config", async () => {
         try{
             let dbConnConfig = new DBConnConfigMSSQL()
-            let dbConnService = new DBConnMSSQLService(dbConnConfig)
+            let dbConnService = new DBConnService(dbConnConfig)
             dbConnService.Open()
         }catch(error){
             expect(error).toBeInstanceOf(DBConnBadConfigEx)
@@ -24,7 +24,7 @@ describe("DB Connection", () => {
             DEFAULT_DB_HOST,
             DEFAULT_DB_PORT
         )
-        let dbConnService = new DBConnMSSQLService(dbConnConfig)
+        let dbConnService = new DBConnServiceMSSQL(dbConnConfig)
         let dbConn = await dbConnService.Open()
 
         expect(dbConn).not.toBe(null)
@@ -41,7 +41,7 @@ describe("DB Connection", () => {
             DEFAULT_DB_HOST,
             DEFAULT_DB_PORT
         )
-        let dbConnService = new DBConnMSSQLService(dbConnConfig)
+        let dbConnService = new DBConnServiceMSSQL(dbConnConfig)
         let dbConn = await dbConnService.Open()
 
         expect(dbConn).not.toBe(null)
@@ -59,7 +59,7 @@ describe("DB Connection", () => {
                 DEFAULT_DB_HOST,
                 DEFAULT_DB_PORT
             )
-            let dbConnService = new DBConnMSSQLService(dbConnConfig)
+            let dbConnService = new DBConnServiceMSSQL(dbConnConfig)
 
             dbConnService.Close()
         }catch(error){

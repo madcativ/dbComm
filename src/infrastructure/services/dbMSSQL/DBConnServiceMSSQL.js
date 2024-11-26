@@ -1,12 +1,19 @@
-import { DBConnCouldNotConnectEx, DBConnCouldNotDisconnectEx } from "@dbComm/src/domain/exceptions/DBConnExceptions"
-import IDBConn from "@dbComm/src/domain/interfaces/conn/IDBConn"
-import sql from "mssql"
-import DBConnService from "../DBConnService"
-import DBConnConfigMSSQL from "./DBConnConfigMSSQL"
-import DBConnMSSQL from "./DBConnMSSQL"
+const { DBConnCouldNotConnectEx, DBConnCouldNotDisconnectEx } = require("../../../domain/exceptions/DBConnExceptions");
+const { IDBConn } = require("../../../domain/interfaces/conn/IDBConn");
+const { DBConnService } = require("../DBConnService");
+const sql = require("mssql");
+const { DBConnConfigMSSQL } = require("./DBConnConfigMSSQL");
+const { DBConnMSSQL } = require("./DBConnMSSQL");
 
-export default class DBConnMSSQLService extends DBConnService<DBConnMSSQL, DBConnConfigMSSQL>{
-    async Open() : Promise<IDBConn | null>{
+/**
+* @class DBConnServiceMSSQL
+* @extends {DBConnService<DBConnMSSQL, DBConnConfigMSSQL>}
+*/
+class DBConnServiceMSSQL extends DBConnService{
+    /**
+    * @returns {Promise<IDBConn | null>}
+    */
+    async Open(){
         let sqlConn = await sql.connect({
             user : this.config.user,
             password : this.config.pass,
@@ -24,6 +31,9 @@ export default class DBConnMSSQLService extends DBConnService<DBConnMSSQL, DBCon
         return this.conn
     }
 
+    /**
+     * @returns {void}
+     */
     Close(){
         if(!this.conn || !this.conn.IsConnnected()){
             throw new DBConnCouldNotDisconnectEx("Connection is not open")
@@ -35,4 +45,8 @@ export default class DBConnMSSQLService extends DBConnService<DBConnMSSQL, DBCon
 
         if(error != ""){ throw new DBConnCouldNotDisconnectEx() }
     }
+}
+
+module.exports = {
+    DBConnServiceMSSQL
 }

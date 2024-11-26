@@ -1,13 +1,13 @@
-import { DBCallsBadRequestEx } from '@dbComm/src/domain/exceptions/DBCallsExceptions'
-import ParamsDirections from '@dbComm/src/domain/valueObjs/ParamsDirections'
-import ParamsTypes from '@dbComm/src/domain/valueObjs/ParamsTypes'
-import QueryParam from '@dbComm/src/domain/valueObjs/QueryParam'
-import SPParam from '@dbComm/src/domain/valueObjs/SPParam'
-import DBCallsServiceFactory from '@dbComm/src/infrastructure/factories/DBCallsServiceFactory'
-import DBCallsRequestQuery from '@dbComm/src/infrastructure/services/DBCallsRequestQuery'
-import DBCallsRequestSP from '@dbComm/src/infrastructure/services/DBCallsRequestSP'
 import 'dotenv/config'
 import { describe, expect, test } from "vitest"
+import { DBCallsBadRequestEx } from '../src/domain/exceptions/DBCallsExceptions'
+import ParamsDirections from '../src/domain/valueObjs/ParamsDirections'
+import ParamsTypes from '../src/domain/valueObjs/ParamsTypes'
+import QueryParam from '../src/domain/valueObjs/QueryParam'
+import SPParam from '../src/domain/valueObjs/SPParam'
+import DBCallsServiceFactory from '../src/infrastructure/factories/DBCallsServiceFactory'
+import DBCallsRequestQuery from '../src/infrastructure/services/DBCallsRequestQuery'
+import DBCallsRequestSP from '../src/infrastructure/services/DBCallsRequestSP'
 
 describe("DB Calls", () => {
     test("Select simple", async () => {
