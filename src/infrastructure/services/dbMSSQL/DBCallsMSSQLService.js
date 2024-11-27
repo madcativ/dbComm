@@ -107,11 +107,13 @@ class DBCallsMSSQLService extends DBCallsService{
             let mssqlRequest = this.FillSPRequest(request.params, dbConn.connObj.request())
 
             let queryResult = await mssqlRequest.execute(request.spName)
+            
+            if(queryResult.recordset === undefined && Object.keys(queryResult.output).length <= 0){
+                throw new DBCallsNoResultEx()
+            }
 
-            if(queryResult.recordset.length <= 0){ throw new DBCallsNoResultEx() }
-
-            let callsResult = new DBCallsResult(queryResult.recordset)
-
+            let callsResult = new DBCallsResult(queryResult.recordset, queryResult.output)
+            
             this.dbConnService.Close()
 
             return callsResult
