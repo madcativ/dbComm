@@ -1,6 +1,3 @@
-/**
- * @enum {string}
- */
 const ParamsTypes = {
     // TEXT
     VARCHAR : "varchar",

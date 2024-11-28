@@ -10,17 +10,7 @@ const { DBCallsResult } = require("../DBCallsResult");
 const { DBConnEx } = require("../../../domain/exceptions/DBConnExceptions");
 const { IDBCallsRequestSP } = require("../../../domain/interfaces/calls/IDBCallsRequestSP");
 
-/**
- * @class DBCallsMSSQLService
- * @extends {DBCallsService}
- */
 class DBCallsMSSQLService extends DBCallsService{
-    
-    /**
-     * @param {Array<QueryParam>} params
-     * @param {sql.Request} mssqlrequest
-     * @returns {sql.Request}
-     */
     FillQueryRequest(params, mssqlrequest){
         if(params === undefined){ return mssqlrequest }
 
@@ -33,11 +23,6 @@ class DBCallsMSSQLService extends DBCallsService{
         return mssqlrequest
     }
     
-    /**
-     * @param {Array<QueryParam>} params
-     * @param {sql.Request} mssqlRequest
-     * @returns {sql.Request}
-     */
     FillSPRequest(params, mssqlRequest){
         if(params === undefined){ return mssqlRequest }
 
@@ -56,12 +41,6 @@ class DBCallsMSSQLService extends DBCallsService{
         return mssqlRequest
     }
     
-    /**
-     * @async
-     * @template U
-     * @param {IDBCallsRequestQuery} request
-     * @returns {Promise<IDBCallsResult<U>>}
-     */
     async CallQuery(request){
         try{
             if(request.query == ""){ throw new DBCallsBadRequestEx() }
@@ -92,12 +71,6 @@ class DBCallsMSSQLService extends DBCallsService{
         }
     }
     
-    /**
-     * @async
-     * @template U
-     * @param {IDBCallsRequestSP} request
-     * @returns {Promise<IDBCallsResult<U>>}
-     */
     async CallSP(request){
         try{
             if(request.spName == ""){ throw new DBCallsBadRequestEx() }

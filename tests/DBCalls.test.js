@@ -12,7 +12,6 @@ describe("DB Calls", () => {
     test("Select simple", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
 
-        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
         let callsResult = await dbCallsService.CallQuery(new DBCallsRequestQuery(
             `
             WITH TEMP(field1, field2, field3)
@@ -36,7 +35,6 @@ describe("DB Calls", () => {
     test("Select with good params", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
 
-        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
         let callsResult = await dbCallsService.CallQuery(new DBCallsRequestQuery(
             `
             WITH TEMP(field1, field2, field3)
@@ -87,7 +85,6 @@ describe("DB Calls", () => {
     test("Execute SP with good params", async () => {
         let dbCallsService = new DBCallsServiceFactory().Get()
         
-        /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
         let resultEntity = await dbCallsService.CallSP(new DBCallsRequestSP("SPTest", [
             new SPParam("param1", ParamsTypes.VARCHAR, "Hello")
         ]))
@@ -101,7 +98,6 @@ describe("DB Calls", () => {
         try{
             let dbCallsService = new DBCallsServiceFactory().Get()
 
-            /** @type {{result : {field1 : string, field2 : string, field3 : string}[]}} */
             await dbCallsService.CallSP(new DBCallsRequestSP("SPTest", [
                 new SPParam("p1", ParamsTypes.VARCHAR)
             ]))

@@ -1,18 +1,9 @@
 const { DBConnCouldNotConnectEx, DBConnCouldNotDisconnectEx } = require("../../../domain/exceptions/DBConnExceptions");
-const { IDBConn } = require("../../../domain/interfaces/conn/IDBConn");
 const { DBConnService } = require("../DBConnService");
 const sql = require("mssql");
-const { DBConnConfigMSSQL } = require("./DBConnConfigMSSQL");
 const { DBConnMSSQL } = require("./DBConnMSSQL");
 
-/**
-* @class DBConnServiceMSSQL
-* @extends {DBConnService<DBConnMSSQL, DBConnConfigMSSQL>}
-*/
 class DBConnServiceMSSQL extends DBConnService{
-    /**
-    * @returns {Promise<IDBConn | null>}
-    */
     async Open(){
         let sqlConn = await sql.connect({
             user : this.config.user,
@@ -31,9 +22,6 @@ class DBConnServiceMSSQL extends DBConnService{
         return this.conn
     }
 
-    /**
-     * @returns {void}
-     */
     Close(){
         if(!this.conn || !this.conn.IsConnnected()){
             throw new DBConnCouldNotDisconnectEx("Connection is not open")
