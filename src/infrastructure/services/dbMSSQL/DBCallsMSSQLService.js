@@ -1,14 +1,10 @@
-const { QueryParam } = require("../../../domain/valueObjs/QueryParam");
 const { DBCallsService } = require("../DBCallsService");
 const sql = require("mssql");
 const { TediousMSSQLTypes } = require("./TediousMSSQLTypes");
 const { ParamsDirections } = require("../../../domain/valueObjs/ParamsDirections");
-const { IDBCallsRequestQuery } = require("../../../domain/interfaces/calls/IDBCallsRequestQuery");
-const { IDBCallsResult } = require("../../../domain/interfaces/calls/IDBCallsResult");
 const { DBCallsBadRequestEx, DBCallsNoResultEx, DBCallsEx, DBCallsCouldNotCallEx } = require("../../../domain/exceptions/DBCallsExceptions");
 const { DBCallsResult } = require("../DBCallsResult");
 const { DBConnEx } = require("../../../domain/exceptions/DBConnExceptions");
-const { IDBCallsRequestSP } = require("../../../domain/interfaces/calls/IDBCallsRequestSP");
 
 class DBCallsMSSQLService extends DBCallsService{
     FillQueryRequest(params, mssqlrequest){

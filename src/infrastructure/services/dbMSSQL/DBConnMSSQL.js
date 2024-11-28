@@ -1,6 +1,4 @@
 const { IDBConn } = require("../../../domain/interfaces/conn/IDBConn")
-const sql = require("mssql")
-const { IDBConnConfig } = require("../../../domain/interfaces/conn/IDBConnConfig")
 const { DBConnIsNullEx } = require("../../../domain/exceptions/DBConnExceptions")
 
 class DBConnMSSQL extends IDBConn{
