@@ -2,15 +2,21 @@ import { DBCallsBadRequestEx, DBCallsCouldNotCallEx, DBCallsEx, DBCallsNoResultE
 import { DBConnEx } from "@dbComm/src/domain/exceptions/DBConnExceptions"
 import IDBCallsRequestQuery from "@dbComm/src/domain/interfaces/calls/IDBCallsRequestQuery"
 import IDBCallsRequestSP from "@dbComm/src/domain/interfaces/calls/IDBCallsRequestSP"
-import IDBCallsResult from "@dbComm/src/domain/interfaces/calls/IDBCallsResult"
+import IDBCallsResultQuery from "@dbComm/src/domain/interfaces/calls/IDBCallsResultQuery"
+import IDBCallsResultSP from "@dbComm/src/domain/interfaces/calls/IDBCallsResultSP"
+import IDBCallsService from "@dbComm/src/domain/interfaces/calls/IDBCallsService"
 import ParamsDirections from "@dbComm/src/domain/valueObjs/ParamsDirections"
 import QueryParam from "@dbComm/src/domain/valueObjs/QueryParam"
 import sql, { RequestError } from "mssql"
-import DBCallsResult from "../DBCallsResult"
-import DBCallsService from "../DBCallsService"
+import DBConnMSSQL from "./DBConnMSSQL"
 import TediousMSSQLTypes from "./TediousMSSQLTypes"
 
-export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPool>{
+export default class DBCallsServiceMSSQL implements IDBCallsService{
+    dbConn : DBConnMSSQL
+
+    constructor(dbConn : DBConnMSSQL){
+        this.dbConn = dbConn
+    }
 
     FillQueryRequest(params : Array<QueryParam>, mssqlrequest : sql.Request) : sql.Request{
         if(params === undefined){ return mssqlrequest }
@@ -42,27 +48,26 @@ export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPo
         return mssqlRequest
     }
 
-    async CallQuery<U>(request : IDBCallsRequestQuery) : Promise<IDBCallsResult<U>>{
+    async CallQuery<T>(request : IDBCallsRequestQuery) : Promise<IDBCallsResultQuery<T>>{
         try{
             if(request.query == ""){ throw new DBCallsBadRequestEx() }
 
-            let dbConn = await this.dbConnService.Open()
+            await this.dbConn.Open()
+            const mssqlRequest = this.FillQueryRequest(request.data, this.dbConn.connObj.request())
+            const mssqlQueryResult = await mssqlRequest.query<T>(request.query)
 
-            let mssqlRequest = this.FillQueryRequest(request.data, dbConn.connObj.request())
+            if(mssqlQueryResult.recordset.length <= 0){ throw new DBCallsNoResultEx() }
+            const dbCallsResultQuery : IDBCallsResultQuery<T> = {
+                result : mssqlQueryResult.recordset
+            }
 
-            let queryResult = await mssqlRequest.query<U>(request.query)
+            this.dbConn.Close()
 
-            if(queryResult.recordset.length <= 0){ throw new DBCallsNoResultEx() }
-
-            let callsResult = new DBCallsResult<U>(queryResult.recordset)
-
-            this.dbConnService.Close()
-
-            return callsResult
+            return dbCallsResultQuery
         }catch(error){
             if(error instanceof DBConnEx){ throw error }
             
-            this.dbConnService.Close()
+            this.dbConn.Close()
 
             if(error instanceof DBCallsEx || error instanceof RequestError){
                 throw new DBCallsBadRequestEx(error.message)
@@ -72,27 +77,29 @@ export default class DBCallsMSSQLService extends DBCallsService<sql.ConnectionPo
         }
     }
 
-    async CallSP<U>(request : IDBCallsRequestSP) : Promise<IDBCallsResult<U>>{
+    async CallSP<T, U>(request : IDBCallsRequestSP) : Promise<IDBCallsResultSP<T, U>>{
         try{
             if(request.spName == ""){ throw new DBCallsBadRequestEx() }
 
-            let dbConn = await this.dbConnService.Open()
+            await this.dbConn.Open()
+            const mssqlRequest = this.FillSPRequest(request.params, this.dbConn.connObj.request())
+            const mssqlQueryResult = await mssqlRequest.execute<T>(request.spName)
 
-            let mssqlRequest = this.FillSPRequest(request.params, dbConn.connObj.request())
+            if(mssqlQueryResult.recordset === undefined && Object.keys(mssqlQueryResult.output).length <= 0){
+                throw new DBCallsNoResultEx()
+            }
+            const dbCallsResultSP : IDBCallsResultSP<T, U> = {
+                result : mssqlQueryResult.recordset,
+                outputs : mssqlQueryResult.output as U
+            }
 
-            let queryResult = await mssqlRequest.execute(request.spName)
+            this.dbConn.Close()
 
-            if(queryResult.recordset.length <= 0){ throw new DBCallsNoResultEx() }
-
-            let callsResult = new DBCallsResult<U>(queryResult.recordset)
-
-            this.dbConnService.Close()
-
-            return callsResult
+            return dbCallsResultSP
         }catch(error){
             if(error instanceof DBConnEx){ throw error }
             
-            this.dbConnService.Close()
+            this.dbConn.Close()
 
             if(error instanceof DBCallsEx || error instanceof RequestError){
                 throw new DBCallsBadRequestEx(error.message)

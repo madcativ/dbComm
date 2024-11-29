@@ -1,7 +1,7 @@
 import IDBConnConfig from "./IDBConnConfig"
 
 export default interface IDBConn{
-    connObj : any
-    config : IDBConnConfig
+    Open(config? : IDBConnConfig) : Promise<void>
+    Close() : void
     IsConnnected() : boolean
 }

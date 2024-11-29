@@ -1,10 +1,9 @@
-import IDBConnService from "../conn/IDBConnService"
 import IDBCallsRequestQuery from "./IDBCallsRequestQuery"
 import IDBCallsRequestSP from "./IDBCallsRequestSP"
-import IDBCallsResult from "./IDBCallsResult"
+import IDBCallsResultQuery from "./IDBCallsResultQuery"
+import IDBCallsResultSP from "./IDBCallsResultSP"
 
 export default interface IDBCallsService{
-    dbConnService : IDBConnService
-    CallQuery<T>(request : IDBCallsRequestQuery) : Promise<IDBCallsResult<T>>
-    CallSP<T>(request : IDBCallsRequestSP) : Promise<IDBCallsResult<T>>
+    CallQuery<T>(request : IDBCallsRequestQuery) : Promise<IDBCallsResultQuery<T>>
+    CallSP<T, U>(request : IDBCallsRequestSP) : Promise<IDBCallsResultSP<T, U>>
 }

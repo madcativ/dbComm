@@ -9,9 +9,11 @@
   "author": "madcativ",
   "license": "GPL-3.0-only",
   "dependencies": {
+    "dotenv": "^16.4.5",
     "mssql": "^11.0.1"
   },
   "devDependencies": {
-    "@types/mssql": "^9.1.5"
+    "@types/mssql": "^9.1.5",
+    "vitest": "^2.1.6"
   }
 }

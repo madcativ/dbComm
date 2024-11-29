@@ -1,16 +1,5 @@
 import IDBConnConfig from "@dbComm/src/domain/interfaces/conn/IDBConnConfig"
-import { DEFAULT_DB_DATABASE, DEFAULT_DB_HOST, DEFAULT_DB_PASS, DEFAULT_DB_PORT, DEFAULT_DB_USER } from "../../contants/DefaultsDBConnConfig"
-
-export const defaultPool = {
-    max : 10,
-    min : 0,
-    idleTimeoutMillis : 30000
-}
-
-export const defaultOptions = {
-    encrypt : false,
-    trustServerCertificate : true
-}
+import { DEFAULT_DB_DATABASE, DEFAULT_DB_HOST, DEFAULT_DB_MSSQL_OPTIONS, DEFAULT_DB_MSSQL_POOL, DEFAULT_DB_PASS, DEFAULT_DB_PORT, DEFAULT_DB_USER } from "../../contants/DefaultsDBConnConfig"
 
 export default class DBConnConfigMSSQL implements IDBConnConfig{
     user : string
@@ -18,8 +7,8 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
     db : string
     host : string
     port : number
-    pool : typeof defaultPool
-    options : typeof defaultOptions
+    pool : typeof DEFAULT_DB_MSSQL_POOL
+    options : typeof DEFAULT_DB_MSSQL_OPTIONS
 
     constructor(
         user : string = DEFAULT_DB_USER,
@@ -27,8 +16,8 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
         db : string = DEFAULT_DB_DATABASE,
         host : string = DEFAULT_DB_HOST,
         port : number = DEFAULT_DB_PORT,
-        pool : typeof defaultPool = defaultPool,
-        options : typeof defaultOptions = defaultOptions
+        pool : typeof DEFAULT_DB_MSSQL_POOL = DEFAULT_DB_MSSQL_POOL,
+        options : typeof DEFAULT_DB_MSSQL_OPTIONS = DEFAULT_DB_MSSQL_OPTIONS
     ){
         this.user = user
         this.pass = pass
@@ -41,11 +30,22 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
 
     IsValid() : boolean {
         return (
-            this.user != "" &&
-            this.pass != "" &&
-            this.db != "" &&
-            this.host != "" &&
-            this.port > 0
+            this.user &&
+            this.pass &&
+            this.db &&
+            this.host &&
+            this.port && this.port > 0 &&
+            (
+                this.pool &&
+                "max" in this.pool &&
+                "min" in this.pool &&
+                "idleTimeoutMillis" in this.pool
+            ) &&
+            (
+                this.options &&
+                "encrypt" in this.options &&
+                "trustServerCertificate" in this.options
+            )
         )
     }
 
@@ -55,7 +55,7 @@ export default class DBConnConfigMSSQL implements IDBConnConfig{
         this.db = DEFAULT_DB_DATABASE
         this.host = DEFAULT_DB_HOST
         this.port = DEFAULT_DB_PORT
-        this.pool = defaultPool,
-        this.options = defaultOptions
+        this.pool = DEFAULT_DB_MSSQL_POOL,
+        this.options = DEFAULT_DB_MSSQL_OPTIONS
     }
 }
