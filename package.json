@@ -7,5 +7,11 @@
     "test": "vitest"
   },
   "author": "madcativ",
-  "license": "GPL-3.0-only"
+  "license": "GPL-3.0-only",
+  "dependencies": {
+    "mssql": "^11.0.1"
+  },
+  "devDependencies": {
+    "@types/mssql": "^9.1.5"
+  }
 }
