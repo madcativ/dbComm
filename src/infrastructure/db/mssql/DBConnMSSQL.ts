@@ -13,7 +13,7 @@ export default class DBConnMSSQL implements IDBConn {
 
     async Open(config? : DBConnConfigMSSQL) : Promise<void> {
         if(config){ this.config = config }
-        if(!this.config.IsValid()){ throw new DBConnBadConfigEx() }
+        if(!this.config || !this.config.IsValid()){ throw new DBConnBadConfigEx() }
 
         this.connObj = await sql.connect({
             user : this.config.user,

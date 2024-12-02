@@ -1,6 +1,6 @@
 import { DBConnBadConfigEx, DBConnCouldNotDisconnectEx } from '@dbComm/src/domain/exceptions/DBConnExceptions'
-import DBConnConfigMSSQL from '@dbComm/src/infrastructure/services/dbMSSQL/DBConnConfigMSSQL'
-import DBConnMSSQL from '@dbComm/src/infrastructure/services/dbMSSQL/DBConnMSSQL'
+import DBConnConfigMSSQL from '@dbComm/src/infrastructure/db/mssql/DBConnConfigMSSQL'
+import DBConnMSSQL from '@dbComm/src/infrastructure/db/mssql/DBConnMSSQL'
 import "dotenv/config"
 import { describe, expect, test } from "vitest"
 

@@ -77,7 +77,7 @@ export default class DBCallsServiceMSSQL implements IDBCallsService{
         }
     }
 
-    async CallSP<T, U>(request : IDBCallsRequestSP) : Promise<IDBCallsResultSP<T, U>>{
+    async CallSP<T, U = {}>(request : IDBCallsRequestSP) : Promise<IDBCallsResultSP<T, U>>{
         try{
             if(request.spName == ""){ throw new DBCallsBadRequestEx() }
 
