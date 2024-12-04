@@ -56,7 +56,6 @@ export default class DBCallsServiceMSSQL implements IDBCallsService{
             const mssqlRequest = this.FillQueryRequest(request.data, this.dbConn.connObj.request())
             const mssqlQueryResult = await mssqlRequest.query<T>(request.query)
 
-            if(mssqlQueryResult.recordset.length <= 0){ throw new DBCallsNoResultEx() }
             const dbCallsResultQuery : IDBCallsResultQuery<T> = {
                 result : mssqlQueryResult.recordset
             }

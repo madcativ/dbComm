@@ -95,6 +95,35 @@ describe("DB Calls", () => {
         }
     })
 
+    test("Select with no results", async () => {
+        try{
+            const dbCallsService = DBCallsServiceFactory.Get()
+
+            const callResult = await dbCallsService.CallQuery<{
+                field1 : string,
+                field2 : string,
+                field3 : string
+            }>(new DBCallsRequestQuery(
+                `
+                WITH TEMP(field1, field2, field3)
+                AS
+                (
+                    SELECT 'Hola' AS 'field1', 'Mundo' AS 'field2', '!!!' AS 'field3'
+                    UNION
+                    SELECT 'Hello' AS 'field1', 'World' AS 'field2', '!!!' AS 'field3'
+                )
+                SELECT *
+                FROM TEMP
+                WHERE field1 = 'X'
+                `
+            ))
+
+            expect(callResult.result.length).lessThanOrEqual(0)
+        }catch(error){
+            expect(error).toBeInstanceOf(DBCallsBadRequestEx)
+        }
+    })
+
     test("Execute SP with good params", async () => {
         const dbCallsService = DBCallsServiceFactory.Get()
 
